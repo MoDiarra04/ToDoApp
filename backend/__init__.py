@@ -4,9 +4,9 @@ from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
 app = Flask(__name__)
-CORS(app)
+CORS(app,resources={r"/*": {"origins": "http://localhost:3000"}})
 
-app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"  # Lokale MongoDB oder MongoDB Atlas URI
+app.config["MONGO_URI"] = "mongodb://localhost:27017/ToDoApp"  # Lokale MongoDB oder MongoDB Atlas URI
 
 mongo = PyMongo(app)
 
