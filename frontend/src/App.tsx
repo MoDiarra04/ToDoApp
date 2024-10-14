@@ -13,7 +13,7 @@ function App() {
         main: "#191414",
       },
       secondary: {
-        main: "#00bfff",
+        main: "#6B2D5F",
       },
     },
     typography: {
