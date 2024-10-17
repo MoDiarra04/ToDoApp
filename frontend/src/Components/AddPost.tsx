@@ -84,7 +84,7 @@ function AddPost() {
       </Box>
       <Box sx={{ m: 1 }}>
         <Button variant="contained" endIcon={<AddIcon />} onClick={handleSubmit} color="secondary">
-          Send
+          Post
         </Button>
       </Box>
       {(() => {
