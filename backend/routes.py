@@ -12,7 +12,7 @@ def get_all_posts():
         posts.append(post)
     return jsonify({"posts": posts})
 
-@app.route("/post/new", methods=['GET', 'POST'])
+@app.route("/post/new", methods=['POST'])
 def new_post():
     post = {
         "title": request.json.get("title"),
