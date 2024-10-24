@@ -19,7 +19,6 @@ function AddPost() {
       author: "Modibo",  // Standard-Autor, ändern nach implementieren von Login
     };
 
-    const url = "http://127.0.0.1:5000/post/new";
     const options = {
       method: 'POST',
       headers: {
@@ -27,8 +26,11 @@ function AddPost() {
       },
       body: JSON.stringify(postData),
     };
+
+    const url = "http://127.0.0.1:5000/post/new";
     const response = await fetch(url, options);
     const data = await response.json()
+
     if (response.status === 201) {
       setStatus(true)
     } else {
@@ -36,6 +38,7 @@ function AddPost() {
     }
     console.log(data.message)
   }
+
   // Effekt, um den Alert nach 3 Sekunden zu verbergen
   useEffect(() => {
     if (status === true) {
@@ -46,6 +49,7 @@ function AddPost() {
       return () => clearTimeout(timer); // Timer bereinigen, wenn der Effekt erneut aufgerufen wird
     }
   }, [status]);
+  
   return (
     <>
       <Typography variant="h3" gutterBottom>
