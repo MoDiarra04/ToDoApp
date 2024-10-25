@@ -13,8 +13,8 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "node16", // Das hab ich geändert von esnext auf node16 wegen einem fehler mit keycloak
+    "moduleResolution": "node16", // Das hab ich geändert von node auf node16 wegen einem fehler mit keycloak
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
