@@ -1,27 +1,20 @@
-# add node version 20 to the image; specifies the base image
-FROM node:20
+# Dockerfile for backend
 
-# Sets the working directory inside the container
-WORKDIR /app
+# Use a Python image
+FROM python:3.12.7
 
-# Copy the entire project into the container
-COPY . .
+# Set working directory to backend folder
+WORKDIR /app/backend
 
-# Install Python dependencies if a requirements.txt file exists
-RUN python -m pip install -r requirements.txt
+# Install Python dependencies
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Install the frontend dependencies
-WORKDIR /app/frontend
-RUN npm install
+# Copy backend code to container
+COPY . /app
 
-# Install concurrently package to manage frontend and backend processes together
-RUN npm install -g concurrently
+# Expose the backend port
+EXPOSE 5000
 
-# environment variable, so that the port can be accessed during runtime
-ENV PORT1=3000 PORT2=5000
-
-# EXPOSE backend and frontend ports
-EXPOSE 3000 5000
-
-# start app
-CMD ["npm", "start"]
+# Run the backend with run.py
+CMD ["python", "run.py"]
