@@ -5,12 +5,14 @@ from bson.objectid import ObjectId
 {
 
 }
-@app.route("/posts",methods=["GET"])
+@app.route("/posts", methods=["GET"])
 def get_all_posts():
     posts = []
     for post in db.posts.find():
+        post["_id"] = str(post["_id"])  # Convert ObjectId to string
         posts.append(post)
-    return jsonify({"posts": posts})
+    return jsonify(posts)  # Return the posts list directly
+
 
 @app.route("/post/new", methods=['POST'])
 def new_post():

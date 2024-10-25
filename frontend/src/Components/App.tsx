@@ -1,6 +1,7 @@
-import React from 'react'
-import ButtonAppBar from './AppBar'
-import AddPost from './AddPost'
+import React from 'react';
+import ButtonAppBar from './AppBar';
+import AddPost from './AddPost';
+import ShowPosts from './ShowPosts'; // Import the ShowPosts component
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter } from "react-router-dom";
@@ -18,7 +19,7 @@ function App() {
     },
     typography: {
       fontSize: 16,
-      fontFamily:'Bradley Hand'
+      fontFamily: 'Bradley Hand',
     },
   });
 
@@ -29,10 +30,11 @@ function App() {
         <div className="App">
           <ButtonAppBar />
         </div>
-        <AddPost/>
+        <AddPost />
+        <ShowPosts /> {/* Add the ShowPosts component here */}
       </ThemeProvider>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
