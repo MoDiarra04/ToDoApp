@@ -4,6 +4,7 @@ import AddPost from './AddPost'
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter } from "react-router-dom";
+import ShowPosts from './ShowPost';
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
           <ButtonAppBar />
         </div>
         <AddPost/>
+        <ShowPosts />
       </ThemeProvider>
     </BrowserRouter>
   )
