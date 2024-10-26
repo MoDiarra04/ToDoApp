@@ -1,64 +1,58 @@
-import React, { useState, FormEvent, ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { io, Socket } from 'socket.io-client';
 
-const NewPost: React.FC = () => {
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>('');
-  const navigate = useNavigate();
+interface Post {
+  _id: string;
+  title: string;
+  content: string;
+  author: string;
+  completed: boolean
+}
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+const socket: Socket = io('http://localhost:5000');
 
-    const postData = {
-      title: title,
-      content: content,
-      author: "Modibo"
+const postList: React.FC = () => {
+  const [posts, setPost] = useState<Post[]>([]);
+
+  useEffect(() => {
+    // WebSocket-Verbindung herstellen und auf Nachrichten reagieren
+    socket.on('update_post', (updatedPost: Post) => {
+      setPost(prevposts =>
+        prevposts.map(post => post._id === updatedPost._id ? updatedPost : post)
+      );
+    });
+
+    socket.on('delete_post', (data: { post_id: string }) => {
+      setPost(prevposts =>
+        prevposts.filter(post => post._id !== data.post_id)
+      );
+    });
+
+    socket.on('mark_post', (data: { post_id: string; status: boolean }) => {
+      setPost(prevposts =>
+        prevposts.map(post => post._id === data.post_id ? { ...post, completed: data.status } : post)
+      );
+    });
+
+    return () => {
+      socket.off('update_post');
+      socket.off('delete_post');
+      socket.off('mark_post');
     };
+  }, []);
 
-    try {
-      const response = await fetch('/post/new', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(postData),
-      });
-
-      if (response.ok) {
-        navigate('/home');
-      } else {
-        console.log('Fehler beim Erstellen des Posts');
-      }
-    } catch (error) {
-      console.error('Fehler:', error);
-    }
-  };
-
-return (
-  <div>
-    <h1>Neuen Post erstellen</h1>
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Title</label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label>Content</label>
-        <textarea
-          value={content}
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value)}
-          required
-        />
-      </div>
-      <button type="submit">Post erstellen</button>
-    </form>
-  </div>
-);
+  return (
+    <div>
+      <h1>post List</h1>
+      <ul>
+        {posts.map(post => (
+          <li key={post._id}>
+            {post.title} - {post.completed ? "Completed" : "Not Completed"}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
-export default NewPost;
+export default postList;
