@@ -9,7 +9,7 @@ interface Post {
   completed: boolean
 }
 
-const socket: Socket = io('http://localhost:5000');
+const socket: Socket = io("http://localhost:5000");
 
 const postList: React.FC = () => {
   const [posts, setPost] = useState<Post[]>([]);
@@ -28,16 +28,9 @@ const postList: React.FC = () => {
       );
     });
 
-    socket.on('mark_post', (data: { post_id: string; status: boolean }) => {
-      setPost(prevposts =>
-        prevposts.map(post => post._id === data.post_id ? { ...post, completed: data.status } : post)
-      );
-    });
-
     return () => {
       socket.off('update_post');
       socket.off('delete_post');
-      socket.off('mark_post');
     };
   }, []);
 

@@ -1,10 +1,12 @@
-import React from 'react'
-import ButtonAppBar from './AppBar'
-import AddPost from './AddPost'
+import React from 'react';
+import ButtonAppBar from './AppBar';
+import AddPost from './AddPost';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter } from "react-router-dom";
 import ShowPosts from './ShowPost';
+import Room from './Room';
+import Box from '@mui/material/Box';
 
 function App() {
 
@@ -19,7 +21,7 @@ function App() {
     },
     typography: {
       fontSize: 16,
-      fontFamily:'Bradley Hand'
+      fontFamily: 'Bradley Hand'
     },
   });
 
@@ -30,11 +32,24 @@ function App() {
         <div className="App">
           <ButtonAppBar />
         </div>
-        <AddPost/>
-        <ShowPosts />
+        <Box 
+          display="flex"
+          flexDirection={{ xs: 'column', md: 'row' }} // Stacks on small screens, row on medium and up
+          justifyContent="left"
+          alignItems="flex-start"
+          sx={{ mt: 2 }}
+        >
+          <AddPost />
+          <Box sx={{ ml: { lg: 50 , md: 4, xs: 2 }, mt: { xs: 2, md: 0 } }}> {/* Adjusts margin based on screen size */}
+            <Room />
+          </Box>
+        </Box>
+        <Box sx={{ mt: 2 }}>
+          <ShowPosts />
+        </Box>
       </ThemeProvider>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

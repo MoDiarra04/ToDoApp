@@ -1,4 +1,4 @@
-import React, { useState,useEffect, FormEvent, ChangeEvent } from 'react';
+import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -12,6 +12,7 @@ function AddPost() {
   const [content, setContent] = useState<string>('');
   const [status, setStatus] = useState<boolean>(false)
 
+  //hier unterscheiden zwischen http-request oder Echtzeit-Request über SocketIO mit if else
   const handleSubmit = async () => {
     const postData = {
       title: title,
@@ -49,45 +50,34 @@ function AddPost() {
       return () => clearTimeout(timer); // Timer bereinigen, wenn der Effekt erneut aufgerufen wird
     }
   }, [status]);
-  
+
   return (
-    <>
+    <Box sx={{ml: 2}}>
       <Typography variant="h3" gutterBottom>
         Create a new Post
       </Typography>
-      <Box
-        component="form"
-        sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField id="outlined-basic" label="Title" variant="outlined"
+      <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }} noValidate autoComplete="off">
+        <TextField
+          id="outlined-basic"
+          label="Title"
+          variant="outlined"
           type="text"
           value={title}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
           required
+          fullWidth
         />
-      </Box>
-      <Box
-        component="form"
-        sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
-        noValidate
-        autoComplete="off"
-      >
-        <div>
-          <TextField
-            id="outlined-multiline-static"
-            label="Content"
-            multiline
-            rows={4}
-            value={content}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value)}
-            required
-          />
-        </div>
-      </Box>
-      <Box sx={{ m: 1 }}>
-        <Button variant="contained" endIcon={<AddIcon />} onClick={handleSubmit} color="secondary">
+        <TextField
+          id="outlined-multiline-static"
+          label="Content"
+          multiline
+          rows={4}
+          value={content}
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value)}
+          required
+          fullWidth
+        />
+        <Button variant="contained" endIcon={<AddIcon />} onClick={handleSubmit} color="secondary" fullWidth>
           Post
         </Button>
       </Box>
@@ -103,8 +93,8 @@ function AddPost() {
         }
         return status; // Wenn Status nicht 201 ist, wird nichts zurückgegeben
       })()}
-    </>
-  );
+    </Box>
+      );
 }
 
-export default AddPost;
+      export default AddPost;

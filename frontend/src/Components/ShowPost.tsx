@@ -7,6 +7,9 @@ import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
+import { io, Socket } from 'socket.io-client';
+
+const socket: Socket = io("http://localhost:5000");
 
 interface Post {
   _id: string;
@@ -39,10 +42,36 @@ function ShowPosts() {
     fetchPosts();
   }, []);
 
+  useEffect(() => {
+    // WebSocket-Verbindung herstellen und auf Nachrichten reagieren
+    socket.on('new_post', (post) => {
+      setPosts(prevTodos => [...prevTodos, post]);
+    });
+
+    socket.on('update_post', (updatedPost: Post) => {
+      setPosts(prevposts =>
+        prevposts.map(post => post._id === updatedPost._id ? updatedPost : post)
+      );
+    });
+
+    socket.on('delete_post', (data: { post_id: string }) => {
+      setPosts(prevposts =>
+        prevposts.filter(post => post._id !== data.post_id)
+      );
+    });
+
+    return () => {
+      socket.off('new_post');
+      socket.off('update_post');
+      socket.off('delete_post');
+    };
+  }, []);
+
   const handleEditClick = (post: Post) => {
     setEditingPost({ post_id: post._id, title: post.title, content: post.content });
   };
 
+  //hier unterscheiden zwischen http-request oder Echtzeit-Request über SocketIO mit if else
   const handleSaveClick = async () => {
     if (!editingPost.post_id) return;
 
@@ -147,8 +176,9 @@ function ShowPosts() {
                   {post.content}
                 </Typography>
                 <Button
-                  variant="outlined"
+                  variant="contained"
                   startIcon={<EditIcon />}
+                  color="secondary"
                   onClick={() => handleEditClick(post)}
                   sx={{ mt: 1 }}
                 >
