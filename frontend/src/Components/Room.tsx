@@ -16,7 +16,7 @@ function Room() {
     if (!RoomCode) {
       setError(true)
     } else {
-      //socket.emit('join_room', { room: 'room_name', user_id: });
+      //socket.emit('join_room', { room: RoomCode, user_id: });
     }
   }
 

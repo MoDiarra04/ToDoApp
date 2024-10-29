@@ -9,6 +9,7 @@ import CheckIcon from '@mui/icons-material/Check';
 
 function AddPost() {
   const [title, setTitle] = useState<string>('');
+  const [isInRoom, setIsInRoom] = useState(false); // Zustand für den Raumstatus
   const [content, setContent] = useState<string>('');
   const [status, setStatus] = useState<boolean>(false)
 
@@ -39,6 +40,14 @@ function AddPost() {
     }
     console.log(data.message)
   }
+
+  {/*  useEffect(() =>{
+    // Überprüfen, ob der Benutzer in einem Raum ist
+    socket.emit('check_room_status', {user_id:keycloak_id}, (response: RoomStatusResponse) => {
+      setIsInRoom(response.isInRoom); // Serverantwort zur Raumzugehörigkeit
+    });
+  },[setTitle])
+  */}
 
   // Effekt, um den Alert nach 3 Sekunden zu verbergen
   useEffect(() => {

@@ -146,6 +146,13 @@ def handle_delete_post(data):
     # Benachrichtige alle Clients über das gelöschte ToDo
     emit('delete_post', {'post_id': post_id}, room=room)
 
+@socketio.on('check_room_status')
+def check_userInRoom(data):
+    for room, room_data in active_rooms.items():
+        if data('user_id') in room_data["members_ID"]:
+            return jsonify({"isInRoom": True,"room": room})  # Benutzer wurde gefunden und ist in einem Raum
+    return jsonify({"isInRoom": False})  # Benutzer wurde in keinem Raum gefunden
+
 @socketio.on('new_post')
 def handle_new_post(data):
     room = data['room']

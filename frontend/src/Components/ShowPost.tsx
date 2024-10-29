@@ -18,8 +18,14 @@ interface Post {
   author: string;
 }
 
+interface RoomStatusResponse {
+  isInRoom: boolean;
+  room?: string
+}
+
 function ShowPosts() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [isInRoom, setIsInRoom] = useState(false); // Zustand für den Raumstatus
   const [error, setError] = useState<string | null>(null);
   const [editingPost, setEditingPost] = useState<{ post_id: string | null; title: string; content: string }>({
     post_id: null,
@@ -44,6 +50,7 @@ function ShowPosts() {
 
   useEffect(() => {
     // WebSocket-Verbindung herstellen und auf Nachrichten reagieren
+
     socket.on('new_post', (post) => {
       setPosts(prevTodos => [...prevTodos, post]);
     });
@@ -67,6 +74,13 @@ function ShowPosts() {
     };
   }, []);
 
+{/*  useEffect(() =>{
+    // Überprüfen, ob der Benutzer in einem Raum ist
+    socket.emit('check_room_status', {user_id:keycloak_id}, (response: RoomStatusResponse) => {
+      setIsInRoom(response.isInRoom); // Serverantwort zur Raumzugehörigkeit
+    });
+  },[editing])
+*/}
   const handleEditClick = (post: Post) => {
     setEditingPost({ post_id: post._id, title: post.title, content: post.content });
   };
